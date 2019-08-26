@@ -52,22 +52,43 @@ up. So make a bit of an effort, but know when to stop.
 Before you start writing scripts, you’ll need get a copy of this repository
 to work on. This is a two step process:
 
-* First follow the canvas link (which you've alredy done) to create **your copy** of the repository on github classrom.
-* Then _clone_ **your fork** to the machine you're working on
+* First follow the canvas link (which you've alredy done) to create **your copy** of the repository on github classroom.
+* Then _clone_ **your copy** to the machine you're working on
 
-If you're working in pairs or larger groups only _one_ of you needs to fork
-the repository, but that person then needs to add everyone else as collaborators on the project, and then everyone will need to clone the project to their machine to work on it.
+If you're working in pairs or larger groups only _one_ of you needs to create
+your group's copy in GitHub Classroom, but everyone else will need to join
+that team in GitHub Classroom so they have access to their team's project.
+Also note that if Pat checks out the project on the first day of lab, and then
+later Chris is logged in when you sit down to work on it again, Chris will
+need to check out the project. It's also crucial that everyone commit their
+work (perhaps to a branch) at the end of each work session so that it will
+accessible to everyone in the team.
 
 You’ll “turn in” your work simply by having it committed to the
 repository. We’ll check it out from there to run and grade it.
 We'll obviously need to be able to find your repository to grade it,
-so make sure to submit the URL of your forked repository
+so make sure to submit the URL of your repository
 using whatever technique is indicated by your instructor.
 
 Be certain to **commit often**, and **trade places at the keyboard
 often**. At a minimum you should probably trade every time you solve
 a specific problem that comes out of the test script. You should probably
 consider committing that often as well.
+
+## :warning: Write clean code
+
+Part of the rubric on this is readability, and shell scripts are notoriously
+difficult read. So remember all the nice habits that you've learned, like
+using good variable names and commenting non-obvious instructions.
+
+You should also run the `shellcheck` command on your shell scripts, e.g.,
+
+```bash
+    shellcheck big_clean.sh
+```
+
+and heed
+(or at least ask questions about) any warnings that it throws your way.
 
 ---
 
@@ -105,16 +126,20 @@ For this you should write a bash script called `extract_and_compile.sh` that:
     -   The first is a number that will be used as an argument when you call the C program that you'll be compiling in a bit.
     -   The second is the name of a directory that you should do extract the files into and compile the program.
 -   Extracts the contents of the tar archive `NthPrime.tgz` into the
-    specified directory. This is a compressed tar file (indicated by
-    the `gz`, for `gzip`, in the file extension),
-    so you’ll need to uncompress and then extract; the `tar` command can
-    do both things in one step. You might find the `man` pages
-    for `tar`. This should create a directory `NthPrime` in your scratch
-    directory; that `NthPrime` directory should contain several `*.c` and
-    `*.h` files that can be compiled to create an executable.
+    specified directory.
+    - This is a compressed tar file (indicated by
+      the `gz`, for `gzip`, in the file extension),
+      so you’ll need to uncompress and then extract; the `tar` command can
+      do both things in one step.
+    - You will almost certainly find the `man` pages
+      for `tar` useful.
+    - This extraction should create a directory `NthPrime` in your scratch
+      directory; that `NthPrime` directory should contain several `*.c` and
+      `*.h` files that can be compiled to create an executable.
 -   Goes into the `NthPrime` directory that the `tar` extraction created.
--   Compiles the C program that gets extracted, generating an executable
+-   Compiles the C program that was extracted, generating an executable
     called `NthPrime` (still in the `NthPrime` directory in your specified temporary directory).
+    - See below for notes on how to compile a C program with the `gcc` compiler.
 -   Call the resulting executable (`NthPrime`). `NthPrime` requires a single
     number as a command line argument; you should pass it the first of the two
     command line arguments your script received.
@@ -162,14 +187,14 @@ the `mkdir` call first). You would want to empty the contents of the scratch
 directory before calling your script a second time, or you won't be able to
 tell what was left over from the first call. You probably want to delete
 `/tmp/frogs` (or whatever you called it) when you're done just as a politness
-so you don't clutter up `/tmp/` unnecessarily.
+so you don't clutter up `/tmp` unnecessarily.
 
 ### Some notes on compiling a C program
 
-The C compiler in the lab is `gcc`.
+The C compiler in the lab is the Gnu C Compiler: `gcc`.
 
 There are two `.c` files in this program, both of which will need to be
-compiled and linked. You can do this in a single line (handing gcc both
+compiled and linked for form an executable. You can do this in a single line (handing gcc both
 `.c` files) or you can compile them separately and then link them.
 
 You can tell `gcc` what you want the executable called, or you can take
@@ -186,7 +211,8 @@ line argument.
 
 ### :warning: Some non-obvious assumptions that the test script makes:
 
-The tests assume that the `.tgz` version of the tar archive will be in the specified directory
+The tests require that the `.tgz` version of the tar archive will still
+be in the specified directory
 when you’re done. This means that if you first `gunzip` and then, in a
 separate step, untar, the test is likely to fail since you’ll end up
 with a `.tar` file instead of a `.tgz` file. _So you should use the appropriate `tar` flags that uncompress and untar in a single step._
@@ -351,7 +377,8 @@ the test isn’t being passed go back and re-read the directions
 
 # What to turn in
 
-You'll "turn this in" by committing your work to your fork of this starter
+You'll "turn this in" by committing your work to your GitHub Classroom
+copy of  the
 project. You should also submit the URL of your repository in whatever way
 indicated by your instructor. Remember to make sure you've completed each
 of the assigned tasks:
