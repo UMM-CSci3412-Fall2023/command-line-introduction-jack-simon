@@ -52,7 +52,8 @@ up. So make a bit of an effort, but know when to stop.
 Before you start writing scripts, you’ll need get a copy of this repository
 to work on. This is a two step process:
 
-* First follow the canvas link (which you've alredy done) to create **your copy** of the repository on github classroom.
+* First follow the Canvas link (which you've already done) to create
+  **your copy** of the repository on GitHub Classroom.
 * Then _clone_ **your copy** to the machine you're working on
 
 If you're working in pairs or larger groups only _one_ of you needs to create
