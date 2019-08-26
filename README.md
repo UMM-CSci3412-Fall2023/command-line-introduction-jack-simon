@@ -52,22 +52,44 @@ up. So make a bit of an effort, but know when to stop.
 Before you start writing scripts, you’ll need get a copy of this repository
 to work on. This is a two step process:
 
-* First follow the canvas link (which you've alredy done) to create **your copy** of the repository on github classrom.
-* Then _clone_ **your fork** to the machine you're working on
+* First follow the Canvas link (which you've already done) to create
+  **your copy** of the repository on GitHub Classroom.
+* Then _clone_ **your copy** to the machine you're working on
 
-If you're working in pairs or larger groups only _one_ of you needs to fork
-the repository, but that person then needs to add everyone else as collaborators on the project, and then everyone will need to clone the project to their machine to work on it.
+If you're working in pairs or larger groups only _one_ of you needs to create
+your group's copy in GitHub Classroom, but everyone else will need to join
+that team in GitHub Classroom so they have access to their team's project.
+Also note that if Pat checks out the project on the first day of lab, and then
+later Chris is logged in when you sit down to work on it again, Chris will
+need to check out the project. It's also crucial that everyone commit their
+work (perhaps to a branch) at the end of each work session so that it will
+accessible to everyone in the team.
 
 You’ll “turn in” your work simply by having it committed to the
 repository. We’ll check it out from there to run and grade it.
 We'll obviously need to be able to find your repository to grade it,
-so make sure to submit the URL of your forked repository
+so make sure to submit the URL of your repository
 using whatever technique is indicated by your instructor.
 
 Be certain to **commit often**, and **trade places at the keyboard
 often**. At a minimum you should probably trade every time you solve
 a specific problem that comes out of the test script. You should probably
 consider committing that often as well.
+
+## :warning: Write clean code
+
+Part of the rubric on this is readability, and shell scripts are notoriously
+difficult read. So remember all the nice habits that you've learned, like
+using good variable names and commenting non-obvious instructions.
+
+You should also run the `shellcheck` command on your shell scripts, e.g.,
+
+```bash
+    shellcheck big_clean.sh
+```
+
+and heed
+(or at least ask questions about) any warnings that it throws your way.
 
 ---
 
@@ -105,16 +127,20 @@ For this you should write a bash script called `extract_and_compile.sh` that:
     -   The first is a number that will be used as an argument when you call the C program that you'll be compiling in a bit.
     -   The second is the name of a directory that you should do extract the files into and compile the program.
 -   Extracts the contents of the tar archive `NthPrime.tgz` into the
-    specified directory. This is a compressed tar file (indicated by
-    the `gz`, for `gzip`, in the file extension),
-    so you’ll need to uncompress and then extract; the `tar` command can
-    do both things in one step. You might find the `man` pages
-    for `tar`. This should create a directory `NthPrime` in your scratch
-    directory; that `NthPrime` directory should contain several `*.c` and
-    `*.h` files that can be compiled to create an executable.
+    specified directory.
+    - This is a compressed tar file (indicated by
+      the `gz`, for `gzip`, in the file extension),
+      so you’ll need to uncompress and then extract; the `tar` command can
+      do both things in one step.
+    - You will almost certainly find the `man` pages
+      for `tar` useful.
+    - This extraction should create a directory `NthPrime` in your scratch
+      directory; that `NthPrime` directory should contain several `*.c` and
+      `*.h` files that can be compiled to create an executable.
 -   Goes into the `NthPrime` directory that the `tar` extraction created.
--   Compiles the C program that gets extracted, generating an executable
+-   Compiles the C program that was extracted, generating an executable
     called `NthPrime` (still in the `NthPrime` directory in your specified temporary directory).
+    - See below for notes on how to compile a C program with the `gcc` compiler.
 -   Call the resulting executable (`NthPrime`). `NthPrime` requires a single
     number as a command line argument; you should pass it the first of the two
     command line arguments your script received.
@@ -162,14 +188,14 @@ the `mkdir` call first). You would want to empty the contents of the scratch
 directory before calling your script a second time, or you won't be able to
 tell what was left over from the first call. You probably want to delete
 `/tmp/frogs` (or whatever you called it) when you're done just as a politness
-so you don't clutter up `/tmp/` unnecessarily.
+so you don't clutter up `/tmp` unnecessarily.
 
 ### Some notes on compiling a C program
 
-The C compiler in the lab is `gcc`.
+The C compiler in the lab is the Gnu C Compiler: `gcc`.
 
 There are two `.c` files in this program, both of which will need to be
-compiled and linked. You can do this in a single line (handing gcc both
+compiled and linked for form an executable. You can do this in a single line (handing gcc both
 `.c` files) or you can compile them separately and then link them.
 
 You can tell `gcc` what you want the executable called, or you can take
@@ -186,7 +212,8 @@ line argument.
 
 ### :warning: Some non-obvious assumptions that the test script makes:
 
-The `.tgz` version of the tar archive will be in the specified directory
+The tests require that the `.tgz` version of the tar archive will still
+be in the specified directory
 when you’re done. This means that if you first `gunzip` and then, in a
 separate step, untar, the test is likely to fail since you’ll end up
 with a `.tar` file instead of a `.tgz` file. _So you should use the appropriate `tar` flags that uncompress and untar in a single step._
@@ -210,13 +237,22 @@ Your goal here is to get the tests in `tests.bats` to pass. For this you should 
 -   Takes two arguments:
     - The first will be the name of a compressed `tar` archive (`.tgz` file) that contains the files you'll process.   
     - The second will be the name of a scratch directory you can do your work in.
--   Extracts the contents of the `tar` archive into the specified scratch directory. This will take a few seconds for `big_dir.tgz` since that has over 1000 files in it.
+-   Extracts the contents of the `tar` archive into the specified scratch directory.
+       - There is a command line flag for `tar` that allows you specify where
+         the extracted files should go, which is a lot cleaner than extracting
+         them "where they stand" and then moving them to the target directory.
+         It also ensures that there won't be a conflict with any existing files.
+       - This will take a few seconds for `big_dir.tgz` since that has over 1000 files in it.
 -   Removes all the files from the scratch directory (i.e., the files that came from your `tar` archive) containing the line “DELETE ME!”, while
-    leaving all the others alone. (There are quite a few ways to
-    do this. The `grep` family of tools is probably the easiest way to
-    see if a file has the “DELETE ME!” line. You could then use a shell
-    loop to loop through all the files and remove the ones that have the
-    line, or you can use `rm` with either the `$(…)` syntax or backticks.)
+    leaving all the others alone.
+       - There are quite a few ways to
+         do this. The `grep` family of tools is probably the easiest way to
+         see if a file has the “DELETE ME!” line. You could then use a shell
+         loop to loop through all the files and remove the ones that have the
+         line.
+       - An alternative is the `while/read` approach
+         described on [this page about properly
+         unquoting variables](https://github.com/koalaman/shellcheck/wiki/SC2046).
 -   Create a _new_ compressed `tar` archive that contains the files in the scratch directory _after_ you've removed the "DELETE ME!" files. The files in the archive should _not_ have the path to the scratch directory in their filenames. The new tar file should have the name `cleaned_...` where the ellipsis is replaced by the name of the original file, e.g., if your original file is `little_dir.tgz` then the newly created file should be called `cleaned_little_dir.tgz`.
     - This is probably the trickiest part of the lab because you have to be in the scratch directory when you create the `tar` archive or you'll end up with the path to the scratch directory in all the file names.
     - It's easy enough to `cd $SCRATCH` or `pushd $SCRATCH` to get to the scratch directory to run the `tar -zcf...` command, but then how do you know where you came from, so you can put the new tar file in the right place? The `pwd` command returns your current working directory, so something like `here=$(pwd)` will capture your current directory in a shell variable called `here` so you can use `$here` later to refer to where you had been.
@@ -296,6 +332,39 @@ cleaning/
 0 directories, 4 files
 ```
 
+### :warning: Some non-obvious assumptions that the test script makes:
+
+The tests assume that the `.tgz` version of the tar archive will be in the specified directory
+when you’re done. This means that if you first `gunzip` and then, in a
+separate step, untar, the test is likely to fail since you’ll end up
+with a `.tar` file instead of a `.tgz` file. _So you should use the appropriate `tar` flags that uncompress and untar in a single step._
+
+You should also assume that if you untar `frogs.tgz`
+that will result in a directory called `frogs` that
+contains the files you need to process. There's nothing
+magic about `tar` that requires this to be true;
+expanding `frogs.tgz` could result in free-floating files or directories with all sorts of names, and
+combinations of all that.
+You might find the `basename` command useful for
+getting the name "frogs" out of the filename
+`frogs.tgz`.
+
+You can assume that the first argument
+has the form `frogs.tgz` and not some alternative like
+`frogs.tar.gz`.
+
+The tests assume that your script generates _no_
+"extraneous" output. If, for example, you use the `-v`
+flag with `tar`, you'll generate a bunch of output that
+will cause some of the tests to fail. You may want to have
+"extra" output as a debugging tool while you're working
+on the script, but you'll need to remove all that to get
+the tests to pass. This is consistent with standard
+practice in Unix shell programming, where most commands
+provide little to no output if things went fine, making it
+much easier for you to chain them together into more
+complex behaviors.
+
 # Final Thoughts
 
 Make sure that all your code passes the appropriate tests. Passing the
@@ -309,7 +378,8 @@ the test isn’t being passed go back and re-read the directions
 
 # What to turn in
 
-You'll "turn this in" by committing your work to your fork of this starter
+You'll "turn this in" by committing your work to your GitHub Classroom
+copy of  the
 project. You should also submit the URL of your repository in whatever way
 indicated by your instructor. Remember to make sure you've completed each
 of the assigned tasks:
