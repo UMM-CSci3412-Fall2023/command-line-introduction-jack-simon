@@ -186,7 +186,7 @@ line argument.
 
 ### :warning: Some non-obvious assumptions that the test script makes:
 
-The `.tgz` version of the tar archive will be in the specified directory
+The tests assume that the `.tgz` version of the tar archive will be in the specified directory
 when you’re done. This means that if you first `gunzip` and then, in a
 separate step, untar, the test is likely to fail since you’ll end up
 with a `.tar` file instead of a `.tgz` file. _So you should use the appropriate `tar` flags that uncompress and untar in a single step._
@@ -210,13 +210,22 @@ Your goal here is to get the tests in `tests.bats` to pass. For this you should 
 -   Takes two arguments:
     - The first will be the name of a compressed `tar` archive (`.tgz` file) that contains the files you'll process.   
     - The second will be the name of a scratch directory you can do your work in.
--   Extracts the contents of the `tar` archive into the specified scratch directory. This will take a few seconds for `big_dir.tgz` since that has over 1000 files in it.
+-   Extracts the contents of the `tar` archive into the specified scratch directory.
+       - There is a command line flag for `tar` that allows you specify where
+         the extracted files should go, which is a lot cleaner than extracting
+         them "where they stand" and then moving them to the target directory.
+         It also ensures that there won't be a conflict with any existing files.
+       - This will take a few seconds for `big_dir.tgz` since that has over 1000 files in it.
 -   Removes all the files from the scratch directory (i.e., the files that came from your `tar` archive) containing the line “DELETE ME!”, while
-    leaving all the others alone. (There are quite a few ways to
-    do this. The `grep` family of tools is probably the easiest way to
-    see if a file has the “DELETE ME!” line. You could then use a shell
-    loop to loop through all the files and remove the ones that have the
-    line, or you can use `rm` with either the `$(…)` syntax or backticks.)
+    leaving all the others alone.
+       - There are quite a few ways to
+         do this. The `grep` family of tools is probably the easiest way to
+         see if a file has the “DELETE ME!” line. You could then use a shell
+         loop to loop through all the files and remove the ones that have the
+         line.
+       - An alternative is the `while/read` approach
+         described on [this page about properly
+         unquoting variables](https://github.com/koalaman/shellcheck/wiki/SC2046).
 -   Create a _new_ compressed `tar` archive that contains the files in the scratch directory _after_ you've removed the "DELETE ME!" files. The files in the archive should _not_ have the path to the scratch directory in their filenames. The new tar file should have the name `cleaned_...` where the ellipsis is replaced by the name of the original file, e.g., if your original file is `little_dir.tgz` then the newly created file should be called `cleaned_little_dir.tgz`.
     - This is probably the trickiest part of the lab because you have to be in the scratch directory when you create the `tar` archive or you'll end up with the path to the scratch directory in all the file names.
     - It's easy enough to `cd $SCRATCH` or `pushd $SCRATCH` to get to the scratch directory to run the `tar -zcf...` command, but then how do you know where you came from, so you can put the new tar file in the right place? The `pwd` command returns your current working directory, so something like `here=$(pwd)` will capture your current directory in a shell variable called `here` so you can use `$here` later to refer to where you had been.
@@ -295,6 +304,39 @@ cleaning/
 
 0 directories, 4 files
 ```
+
+### :warning: Some non-obvious assumptions that the test script makes:
+
+The tests assume that the `.tgz` version of the tar archive will be in the specified directory
+when you’re done. This means that if you first `gunzip` and then, in a
+separate step, untar, the test is likely to fail since you’ll end up
+with a `.tar` file instead of a `.tgz` file. _So you should use the appropriate `tar` flags that uncompress and untar in a single step._
+
+You should also assume that if you untar `frogs.tgz`
+that will result in a directory called `frogs` that
+contains the files you need to process. There's nothing
+magic about `tar` that requires this to be true;
+expanding `frogs.tgz` could result in free-floating files or directories with all sorts of names, and
+combinations of all that.
+You might find the `basename` command useful for
+getting the name "frogs" out of the filename
+`frogs.tgz`.
+
+You can assume that the first argument
+has the form `frogs.tgz` and not some alternative like
+`frogs.tar.gz`.
+
+The tests assume that your script generates _no_
+"extraneous" output. If, for example, you use the `-v`
+flag with `tar`, you'll generate a bunch of output that
+will cause some of the tests to fail. You may want to have
+"extra" output as a debugging tool while you're working
+on the script, but you'll need to remove all that to get
+the tests to pass. This is consistent with standard
+practice in Unix shell programming, where most commands
+provide little to no output if things went fine, making it
+much easier for you to chain them together into more
+complex behaviors.
 
 # Final Thoughts
 
