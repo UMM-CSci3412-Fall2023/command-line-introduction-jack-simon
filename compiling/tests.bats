@@ -1,5 +1,9 @@
 #!/usr/bin/env bats
 
+load '../test/test_helper/bats-support/load'
+load '../test/test_helper/bats-assert/load'
+load '../test/test_helper/bats-file/load'
+
 dist=NthPrime
 
 # Create a temporary scratch directory for the shell script to work in.
