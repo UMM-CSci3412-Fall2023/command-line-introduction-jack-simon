@@ -19,12 +19,12 @@ teardown() {
 # If this test fails, your script file doesn't exist, or there's
 # a typo in the name, or it's in the wrong directory, etc.
 @test "extract_and_compile.sh exists" {
-  [ -f "extract_and_compile.sh" ]
+  assert_file_exist extract_and_compile.sh
 }
 
 # If this test fails, your script isn't executable.
 @test "extract_and_compile.sh is executable" {
-  [ -x "extract_and_compile.sh" ]
+  assert_file_executable extract_and_compile.sh
 }
 
 # If this test fails, your script either didn't run at all, or it
