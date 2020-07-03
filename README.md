@@ -1,5 +1,7 @@
 # Command line introduction and shell scripting
 
+[![CI](https://github.com/UMM-CSci-Systems/Command-line-introduction/workflows/CI/badge.svg)](https://github.com/UMM-CSci-Systems/Command-line-introduction/actions)
+
 ## Overview
 
 This provides an basic introduction to shell programming. If you
