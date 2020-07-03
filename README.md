@@ -1,6 +1,7 @@
 # Command line introduction and shell scripting
 
 [![CI](https://github.com/UMM-CSci-Systems/Command-line-introduction/workflows/CI/badge.svg)](https://github.com/UMM-CSci-Systems/Command-line-introduction/actions)
+(This will be marked as "Failing" until you have all the tests passing.)
 
 ## Overview
 
