@@ -49,7 +49,7 @@ teardown() {
 # generated some sort of error when it ran.
 @test "extract_and_compile.sh runs successfully" {
   run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  [ "$status" -eq 0 ]
+  assert_success
 }
 
 # If this test fails, you either didn't extract the contents of the
@@ -58,10 +58,10 @@ teardown() {
 # script directly from the command line and see where it extracted the files.
 @test "extract_and_compile.sh extracts the 'tar' archive contents" {
   run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  [ -d "$BATS_TMPDIR"/$dist ]
-  [ -f "$BATS_TMPDIR"/$dist/main.c ]
-  [ -f "$BATS_TMPDIR"/$dist/nth_prime.c ]
-  [ -f "$BATS_TMPDIR"/$dist/nth_prime.h ]
+  assert_dir_exist "$BATS_TMPDIR/$dist"
+  assert_file_exist "$BATS_TMPDIR/$dist/main.c"
+  assert_file_exist "$BATS_TMPDIR/$dist/nth_prime.c"
+  assert_file_exist "$BATS_TMPDIR/$dist/nth_prime.h"
 }
 
 # If this test fails, you either moved or renamed the compressed `tar` archive.
@@ -70,7 +70,7 @@ teardown() {
 # That would leave the archive as `NthPrime.tar` instead of `NthPrime.tgz`.
 @test "extract_and_compile.sh doesn't remove or rename the compressed 'tar' archive" {
   run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  [ -f "NthPrime.tgz" ]
+  assert_file_exist "NthPrime.tgz"
 }
 
 # If this fails you either haven't compiled the source successfully, or you
@@ -78,7 +78,8 @@ teardown() {
 # your scratch directory to see what's there.
 @test "extract_and_compile.sh compiles the source" {
   run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  [ -x "$BATS_TMPDIR"/$dist/NthPrime ]
+  assert_file_exist "$BATS_TMPDIR/$dist/NthPrime"
+  assert_file_executable "$BATS_TMPDIR/$dist/NthPrime"
 }
 
 # If this fails you either didn't call the compiled program, or you didn't give
@@ -86,7 +87,7 @@ teardown() {
 # what output it generates.
 @test "extract_and_compile.sh computes the correct 5th prime" {
   run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  [ "$output" == "Prime 5 = 11." ]
+  assert_output "Prime 5 = 11."
 }
 
 # If this fails you either didn't call the compiled program, or you didn't give
@@ -94,5 +95,5 @@ teardown() {
 # what output it generates.
 @test "extract_and_compile.sh computes the correct 103rd prime" {
   run ./extract_and_compile.sh 103 "$BATS_TMPDIR"
-  [ "$output" == "Prime 103 = 563." ]
+  assert_output "Prime 103 = 563."
 }
