@@ -6,14 +6,32 @@ load '../test/test_helper/bats-file/load'
 
 dist=NthPrime
 
+# Preserve the temporary directories created by the test file
+# when one or more tests faile. This makes it easier to go
+# see what happened.
+#
+# Feel free to 
+#   - Replace 1 with 0, or
+#   - Comment out or remove the next line
+# if you find that your temporary directory is getting overly cluttered
+# with test directories.
+export BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
+
 # Create a temporary scratch directory for the shell script to work in.
 setup() {
-  BATS_TMPDIR=$(mktemp --directory)
+  BATS_TMPDIR=$(temp_make)
+
+  # Uncomment the following line if you want to see the path to the
+  # temporary directory where you work is happening.
+  # echo "# temp dir = $BATS_TMPDIR" >&3
+  
+  export BATSLIB_FILE_PATH_REM="#${BATS_TMPDIR}"
+  export BATSLIB_FILE_PATH_ADD='<temp>'
 }
 
 # Remove the temporary scratch directory to clean up after ourselves.
 teardown() {
-  rm -rf "$BATS_TMPDIR"
+  temp_del "$BATS_TMPDIR"
 }
 
 # If this test fails, your script file doesn't exist, or there's
