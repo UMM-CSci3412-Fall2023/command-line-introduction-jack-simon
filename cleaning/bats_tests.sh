@@ -6,8 +6,6 @@ load '../test/test_helper/bats-support/load'
 load '../test/test_helper/bats-assert/load'
 load '../test/test_helper/bats-file/load'
 
-dist=NthPrime
-
 little=little_dir
 num_little_remaining_files=16
 
@@ -43,19 +41,19 @@ teardown() {
 # If this test fails, your script file doesn't exist, or there's
 # a typo in the name, or it's in the wrong directory, etc.
 @test "big_clean.sh exists" {
-  [ -f "big_clean.sh" ]
+  assert_file_exist big_clean.sh
 }
 
 # If this test fails, your script isn't executable.
 @test "big_clean.sh is executable" {
-  [ -x "big_clean.sh" ]
+  assert_file_executable big_clean.sh
 }
 
 # If this test fails, your script either didn't run at all, or it
 # generated some sort of error when it ran.
 @test "big_clean.sh runs successfully" {
   run ./big_clean.sh $little.tgz "$BATS_TMPDIR"
-  [ "$status" -eq 0 ]
+  assert_success
 }
 
 # If this test fails, you either didn't extract the contents of the
@@ -64,11 +62,11 @@ teardown() {
 # script directly from the command line and see where it extracted the files.
 @test "big_clean.sh extracts the 'tar' archive contents" {
   run ./big_clean.sh $little.tgz "$BATS_TMPDIR"
-  [ -d "$BATS_TMPDIR"/$little ]
+  assert_dir_exist "$BATS_TMPDIR/$little"
   # This just checks that a few of the files are there.
-  [ -f "$BATS_TMPDIR"/$little/file_6 ]
-  [ -f "$BATS_TMPDIR"/$little/file_12 ]
-  [ -f "$BATS_TMPDIR"/$little/file_18 ]
+  assert_file_exist "$BATS_TMPDIR/$little/file_6"
+  assert_file_exist "$BATS_TMPDIR/$little/file_12"
+  assert_file_exist "$BATS_TMPDIR/$little/file_18"
 }
 
 # If this test fails, you either moved or renamed the compressed `tar` archive.
@@ -76,31 +74,42 @@ teardown() {
 # archive, and then used `tar xf` to extract the contents in a separate step.
 # That would leave the archive as `NthPrime.tar` instead of `NthPrime.tgz`.
 @test "big_clean.sh doesn't remove or rename the compressed 'tar' archive" {
-  run ./big_clean.sh $little.tgz "$BATS_TMPDIR"
-  [ -f "$little.tgz" ]
+  run ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
+  assert_file_exist "$little.tgz"
 }
 
 @test "big_clean.sh creates new 'cleaned_little_dir.tgz' archive" {
-  run ./big_clean.sh $little.tgz "$BATS_TMPDIR"
-  [ -f "cleaned_$little.tgz" ]
+  run ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
+  assert_file_exist "cleaned_$little.tgz"
 }
 
 @test "The new archive has the right number of files in it" {
-  ./big_clean.sh $little.tgz "$BATS_TMPDIR"
+  ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
   run bash -c "tar -ztf cleaned_$little.tgz | grep '/f' | wc -l"
-  [ "$output" -eq $num_little_remaining_files ]
+  assert_output --regexp "\s*$num_little_remaining_files\s*"
+  # [ "$output" -eq $num_little_remaining_files ]
 }
 
+# We should be able to use `refute_line` to also say that some
+# specific files should not be in the output.
 @test "The new archive has (some) of the right files in it" {
   ./big_clean.sh $little.tgz "$BATS_TMPDIR"
-  run bash -c "tar -ztf cleaned_$little.tgz | grep '/f' | sort"
-  [ "${lines[0]}" == "little_dir/file_1" ]
-  [ "${lines[1]}" == "little_dir/file_10" ]
-  [ "${lines[8]}" == "little_dir/file_19" ]
+  # run bash -c "tar -ztf cleaned_$little.tgz | grep '/f' | sort"
+  run tar -ztf cleaned_$little.tgz
+  # assert_line --index 0 "little_dir/file_1"
+  # assert_line --index 1 "little_dir/file_10"
+  # assert_line --index 8 "little_dir/file_19"
+  assert_line --regexp "^little_dir/file_1$"
+  assert_line --regexp "^little_dir/file_10$"
+  assert_line --regexp "^little_dir/file_19$"
+#  [ "${lines[0]}" == "little_dir/file_1" ]
+#  [ "${lines[1]}" == "little_dir/file_10" ]
+#  [ "${lines[8]}" == "little_dir/file_19" ]
 }
 
 @test "big_clean.sh returns the right number of files on the big archive" {
   run ./big_clean.sh $big.tgz "$BATS_TMPDIR"
   run bash -c "tar -ztf cleaned_$big.tgz | grep '/f' | wc -l"
-  [ "$output" -eq $num_big_remaining_files ]
+  assert_output "$num_big_remaining_files"
+  # [ "$output" -eq $num_big_remaining_files ]
 }
