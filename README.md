@@ -192,7 +192,7 @@ important that the scratch directory exist before you call your script (hence
 the `mkdir` call first). You would want to empty the contents of the scratch
 directory before calling your script a second time, or you won't be able to
 tell what was left over from the first call. You probably want to delete
-`/tmp/frogs` (or whatever you called it) when you're done just as a politness
+`/tmp/frogs` (or whatever you called it) when you're done just as a politeness
 so you don't clutter up `/tmp` unnecessarily.
 
 #### Some notes on compiling a C program
