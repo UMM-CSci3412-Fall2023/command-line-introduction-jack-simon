@@ -18,13 +18,13 @@ using shell commands.
 - [Overview](#overview)
 - [Introduction](#introduction)
 - [Setting up](#setting-up)
-- [:warning: Write clean code](#warning-write-clean-code)
+- [:warning: Write clean code](#️-write-clean-code)
 - [Exercises](#exercises)
   - [First script: Compiling a C program](#first-script-compiling-a-c-program)
     - [Some notes on compiling a C program](#some-notes-on-compiling-a-c-program)
-    - [:warning: Some non-obvious assumptions that the test script makes:](#warning-some-non-obvious-assumptions-that-the-test-script-makes)
+    - [:warning: Some non-obvious assumptions that the compiling test script makes](#️-some-non-obvious-assumptions-that-the-compiling-test-script-makes)
   - [Second script: Clean up a big directory](#second-script-clean-up-a-big-directory)
-    - [:warning: Some non-obvious assumptions that the test script makes:](#warning-some-non-obvious-assumptions-that-the-test-script-makes-1)
+    - [:warning: Some non-obvious assumptions that the cleaning test script makes](#️-some-non-obvious-assumptions-that-the-cleaning-test-script-makes)
 - [Final Thoughts](#final-thoughts)
 - [What to turn in](#what-to-turn-in)
 
@@ -32,11 +32,11 @@ using shell commands.
 
 You will need to write several different scripts for this lab:
 
--   A script to extract the contents of a `tar` archive, and then compile and run
+- A script to extract the contents of a `tar` archive, and then compile and run
     the C program it contains
--   A script to delete a large number of unwanted files, leaving the
+- A script to delete a large number of unwanted files, leaving the
     other files in that directory alone
--   A script that separates executable files from non-executable ones,
+- A script that separates executable files from non-executable ones,
     processing the two groups differently
 
 None of these will be very long, but most or all of them will require
@@ -57,9 +57,9 @@ up. So make a bit of an effort, but know when to stop.
 Before you start writing scripts, you’ll need get a copy of this repository
 to work on. This is a two step process:
 
-* First follow the Canvas link (which you've already done) to create
+- First follow the Canvas link (which you've already done) to create
   **your copy** of the repository on GitHub Classroom.
-* Then _clone_ **your copy** to the machine you're working on
+- Then _clone_ **your copy** to the machine you're working on
 
 If you're working in pairs or larger groups only _one_ of you needs to create
 your group's copy in GitHub Classroom, but everyone else will need to join
@@ -108,8 +108,8 @@ You should complete the following exercises for this lab:
 The tests and any relevant files for each part are in the appropriate
 sub-directory in this repository:
 
-* `compiling`
-* `cleaning`
+- `compiling`
+- `cleaning`
 
 In each case there are tests written using the [`bats` testing tool for `bash` scripts](https://github.com/sstephenson/bats) in a file called `tests.bats`.
 You should be able to run the tests with `bats tests.bats`, and use the testing
@@ -128,25 +128,25 @@ The tests and data for this problem are in the `compiling` directory of this pro
 
 For this you should write a bash script called `extract_and_compile.sh` that:
 
--   Takes two arguments.
-    -   The first is a number that will be used as an argument when you call the C program that you'll be compiling in a bit.
-    -   The second is the name of a directory that you should do extract the files into and compile the program.
--   Extracts the contents of the tar archive `NthPrime.tgz` into the
+- Takes two arguments.
+  - The first is a number that will be used as an argument when you call the C program that you'll be compiling in a bit.
+  - The second is the name of a directory that you should do extract the files into and compile the program.
+- Extracts the contents of the tar archive `NthPrime.tgz` into the
     specified directory.
-    - This is a compressed tar file (indicated by
+  - This is a compressed tar file (indicated by
       the `gz`, for `gzip`, in the file extension),
       so you’ll need to uncompress and then extract; the `tar` command can
       do both things in one step.
-    - You will almost certainly find the `man` pages
+  - You will almost certainly find the `man` pages
       for `tar` useful.
-    - This extraction should create a directory `NthPrime` in your scratch
+  - This extraction should create a directory `NthPrime` in your scratch
       directory; that `NthPrime` directory should contain several `*.c` and
       `*.h` files that can be compiled to create an executable.
--   Goes into the `NthPrime` directory that the `tar` extraction created.
--   Compiles the C program that was extracted, generating an executable
+- Goes into the `NthPrime` directory that the `tar` extraction created.
+- Compiles the C program that was extracted, generating an executable
     called `NthPrime` (still in the `NthPrime` directory in your specified temporary directory).
-    - See below for notes on how to compile a C program with the `gcc` compiler.
--   Call the resulting executable (`NthPrime`). `NthPrime` requires a single
+  - See below for notes on how to compile a C program with the `gcc` compiler.
+- Call the resulting executable (`NthPrime`). `NthPrime` requires a single
     number as a command line argument; you should pass it the first of the two
     command line arguments your script received.
 
@@ -158,16 +158,16 @@ As an example, imagine your script is called using:
 
 Then it should
 
-* Extract the contents of `NthPrime.tgz` into
+- Extract the contents of `NthPrime.tgz` into
 `/tmp/tmp.7dMpfowoGF` creating a directory `/tmp/tmp.7dMpfowoGF/NthPrime`
-* Compile the files in `/tmp/tmp.7dMpfowoGF/NthPrime` to generate the binary
+- Compile the files in `/tmp/tmp.7dMpfowoGF/NthPrime` to generate the binary
 `/tmp/tmp.7dMpfowoGF/NthPrime/NthPrime`.
-* Run that binary with the argument `17` (the first argument in this example); this should generate the output `Prime 17 = 59.`
+- Run that binary with the argument `17` (the first argument in this example); this should generate the output `Prime 17 = 59.`
 
 The final file structure in the example above (as
 displayed by the `tree` program) should be:
 
-```
+```bash
 $ tree /tmp/tmp.7dMpfowoGF/
 /tmp/tmp.7dMpfowoGF/
 └── NthPrime
@@ -215,7 +215,7 @@ command line argument. The value you should pass it is
 the number _your script_ received as its _second_ command
 line argument.
 
-#### :warning: Some non-obvious assumptions that the test script makes:
+#### :warning: Some non-obvious assumptions that the compiling test script makes
 
 The tests require that the `.tgz` version of the tar archive will still
 be in the specified directory
@@ -239,16 +239,16 @@ complex behaviors.
 
 Your goal here is to get the tests in `tests.bats` to pass. For this you should write a bash script named `big_clean.sh` that:
 
--   Takes two arguments:
-    - The first will be the name of a compressed `tar` archive (`.tgz` file) that contains the files you'll process.   
-    - The second will be the name of a scratch directory you can do your work in.
--   Extracts the contents of the `tar` archive into the specified scratch directory.
+- Takes two arguments:
+  - The first will be the name of a compressed `tar` archive (`.tgz` file) that contains the files you'll process.
+  - The second will be the name of a scratch directory you can do your work in.
+- Extracts the contents of the `tar` archive into the specified scratch directory.
        - There is a command line flag for `tar` that allows you specify where
          the extracted files should go, which is a lot cleaner than extracting
          them "where they stand" and then moving them to the target directory.
          It also ensures that there won't be a conflict with any existing files.
        - This will take a few seconds for `big_dir.tgz` since that has over 1000 files in it.
--   Removes all the files from the scratch directory (i.e., the files that came from your `tar` archive) containing the line “DELETE ME!”, while
+- Removes all the files from the scratch directory (i.e., the files that came from your `tar` archive) containing the line “DELETE ME!”, while
     leaving all the others alone.
        - There are quite a few ways to
          do this. The `grep` family of tools is probably the easiest way to
@@ -258,16 +258,16 @@ Your goal here is to get the tests in `tests.bats` to pass. For this you should 
        - An alternative is the `while/read` approach
          described on [this page about properly
          unquoting variables](https://github.com/koalaman/shellcheck/wiki/SC2046).
--   Create a _new_ compressed `tar` archive that contains the files in the scratch directory _after_ you've removed the "DELETE ME!" files. The files in the archive should _not_ have the path to the scratch directory in their filenames. The new tar file should have the name `cleaned_...` where the ellipsis is replaced by the name of the original file, e.g., if your original file is `little_dir.tgz` then the newly created file should be called `cleaned_little_dir.tgz`.
-    - This is probably the trickiest part of the lab because you have to be in the scratch directory when you create the `tar` archive or you'll end up with the path to the scratch directory in all the file names.
-    - It's easy enough to `cd $SCRATCH` or `pushd $SCRATCH` to get to the scratch directory to run the `tar -zcf...` command, but then how do you know where you came from, so you can put the new tar file in the right place? The `pwd` command returns your current working directory, so something like `here=$(pwd)` will capture your current directory in a shell variable called `here` so you can use `$here` later to refer to where you had been.
+- Create a _new_ compressed `tar` archive that contains the files in the scratch directory _after_ you've removed the "DELETE ME!" files. The files in the archive should _not_ have the path to the scratch directory in their filenames. The new tar file should have the name `cleaned_...` where the ellipsis is replaced by the name of the original file, e.g., if your original file is `little_dir.tgz` then the newly created file should be called `cleaned_little_dir.tgz`.
+  - This is probably the trickiest part of the lab because you have to be in the scratch directory when you create the `tar` archive or you'll end up with the path to the scratch directory in all the file names.
+  - It's easy enough to `cd $SCRATCH` or `pushd $SCRATCH` to get to the scratch directory to run the `tar -zcf...` command, but then how do you know where you came from, so you can put the new tar file in the right place? The `pwd` command returns your current working directory, so something like `here=$(pwd)` will capture your current directory in a shell variable called `here` so you can use `$here` later to refer to where you had been.
 
 If we assume that your scratch directory is, for example,
 `/tmp/tmp.eMvVweqb`, then after the first step
 (uncompressing) the sample tar file `little_dir.tgz`
 you should end up with:
 
-```
+```bash
 $ tree /tmp/tmp.eMvVweqb/
 /tmp/tmp.eMvVweqb/
 └── little_dir
@@ -298,7 +298,7 @@ $ tree /tmp/tmp.eMvVweqb/
 Then after deleting the appropriate files, you should
 have:
 
-```
+```bash
 $ tree /tmp/tmp.eMvVweqb/
 /tmp/tmp.eMvVweqb/
 └── little_dir
@@ -326,7 +326,7 @@ Finally, after creating the new cleaned tar file
 (`cleaned_little_dir.tgz` in this case) your project
  directory should look like:
 
-```
+```bash
 $ tree cleaning/
 cleaning/
 ├── big_dir.tgz
@@ -337,7 +337,7 @@ cleaning/
 0 directories, 4 files
 ```
 
-#### :warning: Some non-obvious assumptions that the test script makes:
+#### :warning: Some non-obvious assumptions that the cleaning test script makes
 
 The tests assume that the `.tgz` version of the tar archive will be in the specified directory
 when you’re done. This means that if you first `gunzip` and then, in a
@@ -390,4 +390,7 @@ indicated by your instructor. Remember to make sure you've completed each
 of the assigned tasks:
 
 - [ ] First script: Compiling a C program
+  - `compiling/extract_and_compile.sh`
 - [ ] Second script: Clean up a big directory
+  - `cleaning/big_clean.sh`
+- [ ] Commit and push your work to GitHub
