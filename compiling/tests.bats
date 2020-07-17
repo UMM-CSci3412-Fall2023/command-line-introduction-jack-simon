@@ -56,10 +56,10 @@ teardown() {
 # script directly from the command line and see where it extracted the files.
 @test "extract_and_compile.sh extracts the 'tar' archive contents" {
   run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  [ -d "$BATS_TMPDIR"/$dist ]
-  [ -f "$BATS_TMPDIR"/$dist/main.c ]
-  [ -f "$BATS_TMPDIR"/$dist/nth_prime.c ]
-  [ -f "$BATS_TMPDIR"/$dist/nth_prime.h ]
+  assert_dir_exist "$BATS_TMPDIR"/$dist
+  assert_file_exist "$BATS_TMPDIR"/$dist/main.c
+  assert_file_exist "$BATS_TMPDIR"/$dist/nth_prime.c
+  assert_file_exist "$BATS_TMPDIR"/$dist/nth_prime.h
 }
 
 # If this test fails, you either moved or renamed the compressed `tar` archive.
