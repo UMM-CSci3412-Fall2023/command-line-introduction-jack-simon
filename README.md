@@ -1,4 +1,4 @@
-# Command line introduction and shell scripting
+# Command line introduction and shell scripting <!-- omit in toc -->
 
 [![CI](https://github.com/UMM-CSci-Systems/Command-line-introduction/workflows/CI/badge.svg)](https://github.com/UMM-CSci-Systems/Command-line-introduction/actions)
 (This will be marked as "Failing" until you have all the tests passing.)
@@ -15,16 +15,18 @@ using shell commands.
 
 :warning: Remember to complete the [Command line introduction pre-lab](https://github.com/UMM-CSci-Systems/Command-line-introduction-pre-lab) reading and preparation before this lab begins.
 
--   [Introduction](#introduction)
--   [Setting up](#setting-up)
--   [Exercises](#exercises)
-    - [ ]  [First script: Compiling a C
-    program](#first-script-compiling-a-c-program)
-    - [ ]  [Second script: Clean up a big
-    directory](#second-script-clean-up-a-big-directory)
--   [Final Thoughts](#final-thoughts)
--   [What to turn in](#what-to-turn-in)
-
+- [Overview](#overview)
+- [Introduction](#introduction)
+- [Setting up](#setting-up)
+- [:warning: Write clean code](#warning-write-clean-code)
+- [Exercises](#exercises)
+  - [First script: Compiling a C program](#first-script-compiling-a-c-program)
+    - [Some notes on compiling a C program](#some-notes-on-compiling-a-c-program)
+    - [:warning: Some non-obvious assumptions that the test script makes:](#warning-some-non-obvious-assumptions-that-the-test-script-makes)
+  - [Second script: Clean up a big directory](#second-script-clean-up-a-big-directory)
+    - [:warning: Some non-obvious assumptions that the test script makes:](#warning-some-non-obvious-assumptions-that-the-test-script-makes-1)
+- [Final Thoughts](#final-thoughts)
+- [What to turn in](#what-to-turn-in)
 
 ## Introduction
 
@@ -96,7 +98,7 @@ and heed
 
 ---
 
-# Exercises
+## Exercises
 
 You should complete the following exercises for this lab:
 
@@ -120,7 +122,7 @@ You should get all the tests to pass before you "turn in" your work. Having
 the tests pass doesn't guarantee that your scripts are 100% correct, but it's a
 strong initial indicator.
 
-## First script: Compiling a C program
+### First script: Compiling a C program
 
 The tests and data for this problem are in the `compiling` directory of this project, and the discussion of this problem will all assume that you've `cd`ed into that directory. Your goal is to get the tests in `tests.bats` (in the `compiling` directory) to pass.
 
@@ -193,7 +195,7 @@ tell what was left over from the first call. You probably want to delete
 `/tmp/frogs` (or whatever you called it) when you're done just as a politness
 so you don't clutter up `/tmp` unnecessarily.
 
-### Some notes on compiling a C program
+#### Some notes on compiling a C program
 
 The C compiler in the lab is the Gnu C Compiler: `gcc`.
 
@@ -213,7 +215,7 @@ command line argument. The value you should pass it is
 the number _your script_ received as its _second_ command
 line argument.
 
-### :warning: Some non-obvious assumptions that the test script makes:
+#### :warning: Some non-obvious assumptions that the test script makes:
 
 The tests require that the `.tgz` version of the tar archive will still
 be in the specified directory
@@ -233,7 +235,7 @@ provide little to no output if things went fine, making it
 much easier for you to chain them together into more
 complex behaviors.
 
-## Second script: Clean up a big directory
+### Second script: Clean up a big directory
 
 Your goal here is to get the tests in `tests.bats` to pass. For this you should write a bash script named `big_clean.sh` that:
 
@@ -335,7 +337,7 @@ cleaning/
 0 directories, 4 files
 ```
 
-### :warning: Some non-obvious assumptions that the test script makes:
+#### :warning: Some non-obvious assumptions that the test script makes:
 
 The tests assume that the `.tgz` version of the tar archive will be in the specified directory
 when you’re done. This means that if you first `gunzip` and then, in a
@@ -368,7 +370,7 @@ provide little to no output if things went fine, making it
 much easier for you to chain them together into more
 complex behaviors.
 
-# Final Thoughts
+## Final Thoughts
 
 Make sure that all your code passes the appropriate tests. Passing the
 test will make up the majority of your grade. There will also be a
@@ -379,7 +381,7 @@ at them in the grading. Finally, it is easy to overlook important details. If
 the test isn’t being passed go back and re-read the directions
 *carefully*.
 
-# What to turn in
+## What to turn in
 
 You'll "turn this in" by committing your work to your GitHub Classroom
 copy of  the
