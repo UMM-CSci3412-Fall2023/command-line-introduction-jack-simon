@@ -8,7 +8,7 @@
 This provides an basic introduction to shell programming. If you
 use Linux much at all, you'll at least occasionally find yourself needing
 to use the shell/command line (i.e., what you get when you open the terminal program). Having experience with the shell is extremely useful, as you often
-end up needing to, e.g., `ssh` into a remote or cloud system where you won't
+end up needing to, e.g., `ssh` into a remote, cloud-based system where you won't
 have access to the nice GUI tools. This lab provides an introduction to a
 variety of important shell tools and how programming/scripting is done
 using shell commands.
@@ -83,18 +83,49 @@ consider committing that often as well.
 
 ## :warning: Write clean code
 
-Part of the rubric on this is readability, and shell scripts are notoriously
-difficult read. So remember all the nice habits that you've learned, like
-using good variable names and commenting non-obvious instructions.
+Part of this lab's rubric is readability, and shell scripts are notoriously
+difficult to read. So remember all the nice habits that you've learned, like
+using good variable names and commenting non-obvious commands. It's
+worth noting that almost _everything_ in a shell script is non-obvious when
+you first see it. While we definitely would _not_ recommend commenting every
+line of a program in a language like Java or Python, commenting every
+(or nearly every) line in a shell script isn't a bad idea. Students almost
+never comment _too much_ on these, so when in doubt comment more rather than
+less.
 
-You should also run the `shellcheck` command on your shell scripts, e.g.,
+You should make sure you run the `shellcheck` command on your shell
+scripts, e.g.,
 
 ```bash
     shellcheck big_clean.sh
 ```
 
-and heed
-(or at least ask questions about) any warnings that it throws your way.
+and heed (or at least ask questions about) any warnings that it generates.
+
+Some resources on shell style:
+
+- [Shell Style Guide](https://google.github.io/styleguide/shellguide.html)
+  from Google: This is quite detailed and would be a useful resource if you
+  ever have questions about how to handle something in a shell script.
+- [bash-coding-style](https://github.com/icy/bash-coding-style): Another
+  quite detailed style guide with lots of small, readable examples. (The
+  Google guide has fewer examples, and those tend to be longer and more
+  complex.)
+  - This guide also includes an
+    [`examples` directory](https://github.com/icy/bash-coding-style/tree/master/examples)
+    that has some nice examples, such as [the `steam.sh` example](https://github.com/icy/bash-coding-style/blob/master/examples/steam.sh)
+  - Their suggestions about, e.g., putting an underscore (`_`) at the front
+    variable names don't seem all that "standard", so follow your heart on
+    those issues.
+- Shellcheck's [Gallery of bad code](https://github.com/koalaman/shellcheck#gallery-of-bad-code): Goes over a "high priority" subset of things
+  that `shellcheck` looks for. It would probably make sense to at least skim this 
+  since it's quite concise, and we're using `shellcheck` so the payoff
+  will be fairly direct. They don't actually explain _why_ these things are
+  bad, though, so feel free to ask questions if you're uncertain about
+  something (esp. if it comes up when you run `shellcheck`).
+- [Good Coding Practices for Bash](https://www.networkworld.com/article/2694433/unix-good-coding-practices-for-bash.html)
+  is a nice, concise, readable overview of a number of key practices.
+  Unfortunately it's cluttered with tons of annoying ads, so prepare thyself.
 
 ---
 
