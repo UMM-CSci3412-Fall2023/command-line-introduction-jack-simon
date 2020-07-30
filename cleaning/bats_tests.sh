@@ -86,6 +86,19 @@ teardown() {
   assert_file_exist "cleaned_$little.tgz"
 }
 
+# If this test fails you probably didn't get the "internal"
+# directory structure for the archive correct. This is usually
+# because you didn't tar the correct location in the directory
+# structure. If, for example, you have entries in your new
+# archive like `./file_1` then you passed the wrong arguments
+# to `tar` when you created the new archive.
+@test "The archive has the correct internal directory structure" {
+  run ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
+  # List all the files in the new archive
+  run tar -ztf cleaned_$little.tgz
+  # The first line should be the target "internal" directory.
+  assert_line --index 0 "little_dir/"
+}
 @test "The new archive has the right number of files in it" {
   ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
   run bash -c "tar -ztf cleaned_$little.tgz | egrep '^little_dir/file_\d+$' | wc -l"
