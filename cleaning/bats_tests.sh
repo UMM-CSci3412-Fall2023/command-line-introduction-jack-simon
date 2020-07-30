@@ -88,7 +88,7 @@ teardown() {
 
 @test "The new archive has the right number of files in it" {
   ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
-  run bash -c "tar -ztf cleaned_$little.tgz | grep '/f' | wc -l"
+  run bash -c "tar -ztf cleaned_$little.tgz | egrep '^little_dir/file_\d+$' | wc -l"
   assert_output --regexp "\s*$num_little_remaining_files\s*"
   # [ "$output" -eq $num_little_remaining_files ]
 }
@@ -112,7 +112,7 @@ teardown() {
 
 @test "big_clean.sh returns the right number of files on the big archive" {
   run ./big_clean.sh $big.tgz "$BATS_TMPDIR"
-  run bash -c "tar -ztf cleaned_$big.tgz | grep '/f' | wc -l"
+  run bash -c "tar -ztf cleaned_$big.tgz | egrep '^big_dir/file_\d+$' | wc -l"
   assert_output "$num_big_remaining_files"
   # [ "$output" -eq $num_big_remaining_files ]
 }
