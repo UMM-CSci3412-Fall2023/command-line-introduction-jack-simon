@@ -6,7 +6,6 @@ load '../test/test_helper/bats-file/load'
 
 dist=NthPrime
 
-
 #######################################
 # Set up to be run before each test
 #######################################
@@ -40,6 +39,27 @@ setup() {
   # in "full-on debugging" mode.
   # shellcheck disable=SC2034
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
+
+  # Confirm that the script file and the archive file both
+  # (still) exist. If either don't, then we'll fail straight
+  # away because none of the other tests make any sense.
+  if [ ! -f extract_and_compile.sh ]; then
+    echo "# The script extract_and_compile.sh does not exist." >&3
+    echo "# Have you created the script? Did you spell the name correctly?" >&3
+    exit 1
+  fi
+  if [ ! -f NthPrime.tgz ]; then
+    echo "# The archive NthPrime.tgz does not exist." >&3
+    echo "# Did you delete it or rename it?" >&3
+    echo "# Did you possibly use 'gunzip' and change it to .tar?" >&3
+    echo "# You can use 'git' to restore the archive file." >&3
+    exit 1
+  fi
+
+  # Copy the script and archive file to the temp directory
+  # and `cd` there to do all the testing work.
+  cp extract_and_compile.sh NthPrime.tgz "$BATS_TMPDIR"
+  cd "$BATS_TMPDIR" || exit 1
 }
 
 #######################################
@@ -66,7 +86,7 @@ teardown() {
 # generated some sort of error when it ran. Look at the output
 # of running the tests for more info on what went wrong.
 @test "extract_and_compile.sh runs successfully" {
-  run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
+  run ./extract_and_compile.sh 5
   assert_success
 }
 
@@ -75,11 +95,11 @@ teardown() {
 # having trouble debugging this, you might find it useful to call your
 # script directly from the command line and see where it extracts the files.
 @test "extract_and_compile.sh extracts the 'tar' archive contents" {
-  run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  assert_dir_exist "$BATS_TMPDIR/$dist"
-  assert_file_exist "$BATS_TMPDIR/$dist/main.c"
-  assert_file_exist "$BATS_TMPDIR/$dist/nth_prime.c"
-  assert_file_exist "$BATS_TMPDIR/$dist/nth_prime.h"
+  run ./extract_and_compile.sh 5
+  assert_dir_exist "$dist"
+  assert_file_exist "$dist/main.c"
+  assert_file_exist "$dist/nth_prime.c"
+  assert_file_exist "$dist/nth_prime.h"
 }
 
 # If this test fails, you either moved or renamed the compressed `tar` archive.
@@ -87,7 +107,7 @@ teardown() {
 # archive, and then used `tar xf` to extract the contents in a separate step.
 # That would leave the archive as `NthPrime.tar` instead of `NthPrime.tgz`.
 @test "extract_and_compile.sh doesn't remove or rename the compressed 'tar' archive" {
-  run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
+  run ./extract_and_compile.sh 5
   assert_file_exist "NthPrime.tgz"
 }
 
@@ -95,16 +115,16 @@ teardown() {
 # didn't give it the right name. I'd run your script "by hand" and go look in
 # your scratch directory to see what's there.
 @test "extract_and_compile.sh compiles the source" {
-  run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
-  assert_file_exist "$BATS_TMPDIR/$dist/NthPrime"
-  assert_file_executable "$BATS_TMPDIR/$dist/NthPrime"
+  run ./extract_and_compile.sh 5
+  assert_file_exist "$dist/NthPrime"
+  assert_file_executable "$dist/NthPrime"
 }
 
 # If this fails you either didn't call the compiled program, or you didn't give
 # it the right command line argument. I'd run your script "by hand" and see
 # what output it generates.
 @test "extract_and_compile.sh computes the correct 5th prime" {
-  run ./extract_and_compile.sh 5 "$BATS_TMPDIR"
+  run ./extract_and_compile.sh 5
   assert_output "Prime 5 = 11."
 }
 
@@ -112,6 +132,6 @@ teardown() {
 # it the right command line argument. I'd run your script "by hand" and see
 # what output it generates.
 @test "extract_and_compile.sh computes the correct 103rd prime" {
-  run ./extract_and_compile.sh 103 "$BATS_TMPDIR"
+  run ./extract_and_compile.sh 103
   assert_output "Prime 103 = 563."
 }
