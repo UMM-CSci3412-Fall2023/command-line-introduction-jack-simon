@@ -47,6 +47,34 @@ setup() {
   # in "full-on debugging" mode.
   # shellcheck disable=SC2034
   BATSLIB_TEMP_PRESERVE_ON_FAILURE=1
+
+  # Confirm that the script file and the archive file both
+  # (still) exist. If either don't, then we'll fail straight
+  # away because none of the other tests make any sense.
+  if [ ! -f big_clean.sh ]; then
+    echo "# The script big_clean.sh does not exist." >&3
+    echo "# Have you created the script? Did you spell the name correctly?" >&3
+    exit 1
+  fi
+  if [ ! -f little_dir.tgz ]; then
+    echo "# The archive little_dir.tgz does not exist." >&3
+    echo "# Did you delete it or rename it?" >&3
+    echo "# Did you possibly use 'gunzip' and change it to .tar?" >&3
+    echo "# You can use 'git' to restore the archive file." >&3
+    exit 1
+  fi
+  if [ ! -f big_dir.tgz ]; then
+    echo "# The archive big_dir.tgz does not exist." >&3
+    echo "# Did you delete it or rename it?" >&3
+    echo "# Did you possibly use 'gunzip' and change it to .tar?" >&3
+    echo "# You can use 'git' to restore the archive file." >&3
+    exit 1
+  fi
+
+  # Copy the script and archive file to the temp directory
+  # and `cd` there to do all the testing work.
+  cp big_clean.sh little_dir.tgz big_dir.tgz "$BATS_TMPDIR"
+  cd "$BATS_TMPDIR" || exit 1
 }
 
 #######################################
@@ -72,21 +100,8 @@ teardown() {
 # If this test fails, your script either didn't run at all, or it
 # generated some sort of error when it ran.
 @test "big_clean.sh runs successfully" {
-  run ./big_clean.sh $little.tgz "$BATS_TMPDIR"
+  run ./big_clean.sh $little.tgz
   assert_success
-}
-
-# If this test fails, you either didn't extract the contents of the
-# `tar` archive, or you extracted them into the wrong directory. If you're
-# having trouble debugging this, you might find it useful to call your
-# script directly from the command line and see where it extracted the files.
-@test "big_clean.sh extracts the 'tar' archive contents" {
-  run ./big_clean.sh $little.tgz "$BATS_TMPDIR"
-  assert_dir_exist "$BATS_TMPDIR/$little"
-  # This just checks that a few of the files are there.
-  assert_file_exist "$BATS_TMPDIR/$little/file_6"
-  assert_file_exist "$BATS_TMPDIR/$little/file_12"
-  assert_file_exist "$BATS_TMPDIR/$little/file_18"
 }
 
 # If this test fails, you either moved or renamed the compressed `tar` archive.
@@ -94,7 +109,7 @@ teardown() {
 # archive, and then used `tar xf` to extract the contents in a separate step.
 # That would leave the archive as `NthPrime.tar` instead of `NthPrime.tgz`.
 @test "big_clean.sh doesn't remove or rename the compressed 'tar' archive" {
-  run ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
+  run ./big_clean.sh "$little.tgz"
   assert_file_exist "$little.tgz"
 }
 
@@ -103,7 +118,7 @@ teardown() {
 # the file name wrong, or you put the new tar file in the wrong
 # directory.
 @test "big_clean.sh creates new 'cleaned_little_dir.tgz' archive" {
-  run ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
+  run ./big_clean.sh "$little.tgz"
   assert_file_exist "cleaned_$little.tgz"
 }
 
@@ -114,7 +129,7 @@ teardown() {
 # archive like `./file_1` then you passed the wrong arguments
 # to `tar` when you created the new archive.
 @test "The archive has the correct internal directory structure" {
-  run ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
+  run ./big_clean.sh "$little.tgz"
   # List all the files in the new archive
   run tar -ztf cleaned_$little.tgz
   # The first line should be the target "internal" directory.
@@ -128,7 +143,7 @@ teardown() {
 # tar archive). Use `tar -ztf cleaned_little_dir.tgz` to look at
 # the contents of the tar archive you created and if that helps.
 @test "The new archive has the right number of files in it" {
-  ./big_clean.sh "$little.tgz" "$BATS_TMPDIR"
+  ./big_clean.sh "$little.tgz"
   run bash -c "tar -ztf cleaned_$little.tgz | grep -P 'little_dir/file_\d+$' | wc -l"
   assert_output --regexp "\s*$num_little_remaining_files\s*"
 }
@@ -139,7 +154,7 @@ teardown() {
 # actually doing the "right" thing, but with the other tests it's
 # unlikely.
 @test "The new archive has (at least some) of the right files in it" {
-  ./big_clean.sh $little.tgz "$BATS_TMPDIR"
+  ./big_clean.sh $little.tgz
   run tar -ztf cleaned_$little.tgz
   # Some lines that should be in the cleaned archive
   assert_line "little_dir/"
@@ -154,7 +169,7 @@ teardown() {
 # This is the same as the previous "right number of files" test,
 # but on the big archive.
 @test "big_clean.sh returns the right number of files on the big archive" {
-  run ./big_clean.sh $big.tgz "$BATS_TMPDIR"
+  run ./big_clean.sh $big.tgz
   run bash -c "tar -ztf cleaned_$big.tgz | grep -P '^big_dir/file_\d+$' | wc -l"
   assert_output --regexp "\s*$num_big_remaining_files\s*"
 }
