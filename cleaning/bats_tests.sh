@@ -113,6 +113,26 @@ teardown() {
   assert_file_exist "$little.tgz"
 }
 
+# If this test fails, you probably used `gunzip` to uncompress the archive
+# file before extracting its contents, leaving a '.tar` file behind. If you
+# use `tar -z` you can uncompress and extract in one step with `tar`, leaving
+# the original archive file unchanged.
+@test "big_clean.sh doesn't create a '.tar' version of the archive" {
+  run ./big_clean.sh "$little.tgz"
+  assert_file_not_exist "$little.tar"
+}
+
+# If this test fails, you probably extracted the archive in the directory
+# where the script was called instead of creating a temporary directory to
+# do that work in. You want to create a temporary directory (using `mktemp -d`)
+# and extract the archive contents to there (using the `-C` flag for `tar`).
+# This ensures you don't clutter up the user's directory, and possibly
+# overwrite files they have and want to keep.
+@test "big_clean.sh doesn't extract in this directory" {
+  run ./big_clean.sh "$little.tgz"
+  assert_dir_not_exist "$little"
+}
+
 # If this test fails, you didn't create a file called `cleaned_little_dir.tgz`
 # when your script was run on `little_dir.tgz`. This could mean you have
 # the file name wrong, or you put the new tar file in the wrong
