@@ -17,18 +17,18 @@ using shell commands.
 
 :warning: Remember to complete the [Command line introduction pre-lab](https://github.com/UMM-CSci-Systems/Command-line-introduction-pre-lab) reading and preparation before this lab begins.
 
-- [Overview](#overview)
-- [Introduction](#introduction)
-- [Setting up](#setting-up)
-- [:warning: Write clean code](#️-write-clean-code)
-- [Exercises](#exercises)
-  - [First script: Compiling a C program](#first-script-compiling-a-c-program)
-    - [Some notes on compiling a C program](#some-notes-on-compiling-a-c-program)
-    - [:warning: Some non-obvious assumptions that the compiling test script makes](#️-some-non-obvious-assumptions-that-the-compiling-test-script-makes)
-  - [Second script: Clean up a big directory](#second-script-clean-up-a-big-directory)
-    - [:warning: Some non-obvious assumptions that the cleaning test script makes](#️-some-non-obvious-assumptions-that-the-cleaning-test-script-makes)
-- [Final Thoughts](#final-thoughts)
-- [What to turn in](#what-to-turn-in)
+* [Overview](#overview)
+* [Introduction](#introduction)
+* [Setting up](#setting-up)
+* [:warning: Write clean code](#️-write-clean-code)
+* [Exercises](#exercises)
+  * [First script: Compiling a C program](#first-script-compiling-a-c-program)
+    * [Some notes on compiling a C program](#some-notes-on-compiling-a-c-program)
+    * [:warning: Some non-obvious assumptions that the compiling test script makes](#️-some-non-obvious-assumptions-that-the-compiling-test-script-makes)
+  * [Second script: Clean up a big directory](#second-script-clean-up-a-big-directory)
+    * [:warning: Some non-obvious assumptions that the cleaning test script makes](#️-some-non-obvious-assumptions-that-the-cleaning-test-script-makes)
+* [Final Thoughts](#final-thoughts)
+* [What to turn in](#what-to-turn-in)
 
 ## Introduction
 
@@ -62,6 +62,41 @@ to work on. This is a two step process:
 - First follow the Canvas link (which you've already done) to create
   **your copy** of the repository on GitHub Classroom.
 - Then _clone_ **your copy** to the machine you're working on
+
+:warning: **IMPORTANT** :warning: Because of a bug in GitHub's handling
+of templates, your copy of the repository _will not work_ as it is. You'll
+need to run three commands to bring in three different `bats` dependencies:
+
+```bash
+git submodule add https://github.com/bats-core/bats-assert test/test_helper//bats-assert
+
+git submodule add https://github.com/bats-core/bats-support test/test_helper/bats-support
+
+git submodule add https://github.com/bats-core/bats-file test/test_helper/bats-file
+```
+
+<details>
+ <summary>Why do I need to do this?</summary>
+
+ [The `bats-core` version of the Bats testing framework](https://github.com/bats-core/bats-core)
+ uses [`git` _submodules_](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
+ to include its dependencies
+ ([libraries like `bats-file`](https://github.com/bats-core/bats-file))
+ in your project.
+
+ A `git` submodule is essentially an entire `git` repository nested inside
+ an "outer" `git` repository. In this case your project is the outer,
+ containing repository, and things like `bats-file` are the inner,
+ contained repository.
+
+ There's a bug in GitHub's new-ish template mechanism (which is what GitHub
+ classroom uses to create copies of repos for students and groups) that
+ essentially loses the information that a project has submodule
+ dependencies. So until that's fixed you'll need to add those three
+ submodules to every lab that uses Bats.
+
+</details>
+</br>
 
 If you're working in pairs or larger groups only _one_ of you needs to create
 your group's copy in GitHub Classroom, but everyone else will need to join
