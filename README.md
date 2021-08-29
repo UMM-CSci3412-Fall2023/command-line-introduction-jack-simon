@@ -20,15 +20,15 @@ using shell commands.
 - [Overview](#overview)
 - [Introduction](#introduction)
 - [Setting up](#setting-up)
-- [:warning: Write clean code](#warning-write-clean-code)
+- [Write clean code](#write-clean-code)
 - [Exercises](#exercises)
   - [First script: Compiling a C program](#first-script-compiling-a-c-program)
     - [Let the tests drive your solution](#let-the-tests-drive-your-solution)
-    - [:warning: Some non-obvious assumptions that the compiling test script makes](#warning-some-non-obvious-assumptions-that-the-compiling-test-script-makes)
+    - [Some non-obvious assumptions that the compiling test script makes](#some-non-obvious-assumptions-that-the-compiling-test-script-makes)
     - [Running your script by hand](#running-your-script-by-hand)
     - [Some notes on compiling a C program](#some-notes-on-compiling-a-c-program)
   - [Second script: Clean up a big directory](#second-script-clean-up-a-big-directory)
-    - [:warning: Some non-obvious assumptions that the cleaning test script makes](#warning-some-non-obvious-assumptions-that-the-cleaning-test-script-makes)
+    - [Some non-obvious assumptions that the cleaning test script makes](#some-non-obvious-assumptions-that-the-cleaning-test-script-makes)
 - [Final Thoughts](#final-thoughts)
 - [What to turn in](#what-to-turn-in)
 
@@ -130,7 +130,7 @@ and navigator**. At a minimum you should probably trade every time you solve
 a specific problem that comes out of the test script. You should probably
 consider committing that often as well.
 
-## :warning: Write clean code
+## Write clean code
 
 Part of this lab's rubric is readability, and shell scripts are notoriously
 difficult to read. So remember all the nice habits that you've learned, like
@@ -277,7 +277,7 @@ and look at the _first_ failure. What's the simplest thing you can do to
 get that test to pass? Look at the source for the tests (in `bats_tests.sh`)
 for hints on what to do if a given test fails.
 
-#### :warning: Some non-obvious assumptions that the compiling test script makes
+#### Some non-obvious assumptions that the compiling test script makes
 
 The tests require that the `.tgz` version of the tar archive will still
 be in the specified directory
@@ -446,7 +446,7 @@ cleaning/
 0 directories, 4 files
 ```
 
-#### :warning: Some non-obvious assumptions that the cleaning test script makes
+#### Some non-obvious assumptions that the cleaning test script makes
 
 The tests assume that the `.tgz` version of the tar archive will be in the specified directory
 when you’re done. This means that if you first `gunzip` and then, in a
@@ -457,7 +457,7 @@ You should also assume that if you untar `frogs.tgz`
 that will result in a directory called `frogs` that
 contains the files you need to process. (There's nothing
 magic about `tar` that requires this to be true – see
-"Notes on archive structures" for more).
+"[Notes on archive structures](notes-on-archive-structures.md)" for more).
 
 You can assume that the first argument
 has the form `frogs.tgz` and not some alternative like

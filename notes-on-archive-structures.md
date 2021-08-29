@@ -126,8 +126,8 @@ up would be a real nightmare!
 
 ## How does this relate to the lab?
 
-In the "Some non-obvious assumptions that the cleaning test script makes"
-section of the lab write-up when we say:
+[In the "Some non-obvious assumptions that the cleaning test script makes"
+section of the lab write-up](README.md#some-non-obvious-assumptions-that-the-cleaning-test-script-makes) when we say:
 
 > You should also assume that if you untar `frogs.tgz`
 > that will result in a directory called `frogs` that
