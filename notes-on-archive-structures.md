@@ -14,6 +14,7 @@ applies to things like `zip` as well.
 - ["Nice" archive structures](#nice-archive-structures)
 - [What's the "not nice" alternative?](#whats-the-not-nice-alternative)
 - [How does this relate to the lab?](#how-does-this-relate-to-the-lab)
+- [You should always make "nice" archive files](#you-should-always-make-nice-archive-files)
 
 ## The internal structure of a `tar` archive file
 
@@ -142,3 +143,15 @@ be inside that directory.
 We obviously don't _have_ to structure our archive files that way, but
 doing so makes everything simpler and cleaner. So we did, and you can
 (and should) assume we did.
+
+## You should always make "nice" archive files
+
+One take-away here is that when you make archive files for others to use
+(including your future self!), you should almost always make clean archive
+files. I.e., you should gather all the content you want to archive into a
+single (reasonably named) directory, and include that directory as the
+top-level directory in the archive file.
+
+This will ensure that when someone extracts the contents of the archive,
+they won't end up with a living room full of confetti and be quite
+annoyed with you as a result. :cry:
