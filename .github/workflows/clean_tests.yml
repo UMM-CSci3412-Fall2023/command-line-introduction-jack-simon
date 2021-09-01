@@ -16,7 +16,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Setup BATS testing framework
-      uses: mig4/setup-bats@v1.0.1
+      uses: mig4/setup-bats@v1.2.0
     - name: Check out the code
       uses: actions/checkout@v2
       with:
