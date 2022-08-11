@@ -227,12 +227,12 @@ For this you should write a bash script called `extract_and_compile.sh` that:
     `*.h` files that can be compiled to create an executable.
 - Goes into the `NthPrime` directory that the `tar` extraction created.
 - Compiles the C program that was extracted, generating an executable
-  called `NthPrime` (still in the `NthPrime` directory in your specified temporary directory).
+  called `NthPrime` in the same directory.
   - See below for notes on how to compile a C program with
     the `gcc` compiler.
 - Call the resulting executable (`NthPrime`). `NthPrime` requires a single
-  number as a command line argument; you should pass it the first of the two
-  command line arguments your script received.
+  number as a command line argument; you should pass it the command line
+  argument your script received.
 
 As an example, imagine you are in the directory `/home/chris/lab0` and
 your script is called using:
@@ -246,14 +246,13 @@ Then it should
 - Extract the contents of `NthPrime.tgz` into
   the current directory, creating a directory `/home/chris/lab0/NthPrime`
 - Compile the files in `/home/chris/lab0/NthPrime` to generate the
-  binary `/tmp/tmp.7dMpfowoGF/NthPrime/NthPrime`.
+  binary `/home/chris/lab0/NthPrime/NthPrime`.
 - Run that binary with the argument `17` (the first argument in
   this example); this should generate the output `Prime 17 = 59.`
 
-:exclamation: When you run the program you compiled (`NthPrime`) you need give `NthPrime` a _single_
-command line argument. The value you should pass it is
-the number _your script_ received as its _second_ command
-line argument.
+:exclamation: When you run the program you compiled (`NthPrime`) you need give
+`NthPrime` a single command line argument. The value you should pass it is
+the number _your script_ received as _its_ command line argument.
 
 The final file structure in the example above (as
 displayed by the `tree` program) should be:
@@ -304,7 +303,6 @@ you can see exactly what it's doing and where. So you could do
 something like
 
 ```bash
-mkdir /tmp/frogs
 ./extract_and_compile.sh 8
 ```
 
