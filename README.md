@@ -269,6 +269,8 @@ $ tree .
 1 directory, 4 files
 ```
 
+Please note that if you are using bash on windows (say, perhaps, via the Linux for Windows Subsystem) then you may need to install `gcc`.  Talk to your instructor about how to do this if the situation arises (the exact installation command depends upon which distribution of linux is installed) 
+
 #### Let the tests drive your solution
 
 Let the provided Bats tests drive your solution. Run `bats bats_tests.sh`
