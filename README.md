@@ -7,7 +7,10 @@
 
 ## Overview
 
-This provides an basic introduction to shell programming. If you
+**First and Foremost:**  Please read the **entire** lab before starting.  It's quite possible that some questions that arise while reading the lab are answered
+later in the lab. That said... let's get to to it!
+
+This provides a basic introduction to shell programming. If you
 use Linux much at all, you'll at least occasionally find yourself needing
 to use the shell/command line (i.e., what you get when you open the terminal program). Having experience with the shell is extremely useful, as you often
 end up needing to, e.g., `ssh` into a remote, cloud-based system where you won't
