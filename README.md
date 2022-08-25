@@ -74,19 +74,9 @@ to work on. This is a two step process:
 
 :warning: **IMPORTANT** :warning: Because of a bug in GitHub's handling
 of templates, your copy of the repository _will not work_ as it is. You'll
-need to run three commands to bring in three different `bats` dependencies:
+need to run the following two commands to import the submodule files correctly:
 
 ```bash
-git submodule add https://github.com/bats-core/bats-assert test/test_helper//bats-assert
-
-git submodule add https://github.com/bats-core/bats-support test/test_helper/bats-support
-
-git submodule add https://github.com/bats-core/bats-file test/test_helper/bats-file
-```
-
-**AFTER** adding the submodules (which *may* or *may not* be required) run the following commands from the repository directory to import the necessary files:
-
-```
 git submodule init
 
 git submodule update
@@ -200,8 +190,8 @@ sub-directory in this repository:
 - `compiling`
 - `cleaning`
 
-In each case there are tests written using the [`bats` testing tool for `bash` scripts](https://github.com/sstephenson/bats) in a file called `tests.bats`.
-You should be able to run the tests with `bats tests.bats`, and use the testing
+In each case there are tests written using the [`bats` testing tool for `bash` scripts](https://github.com/sstephenson/bats) in a file called `bats_tests.sh`.
+You should be able to run the tests with `bats bats_tests.sh`, and use the testing
 results as a guide to the development of your scripts. If you ever find that you
 don't understand what the tests are "telling you", definitely ask; they are
 there to help you, and if they aren't communicating effectively then they're
@@ -214,7 +204,7 @@ strong initial indicator.
 ### First script: Compiling a C program
 
 The tests and data for this problem are in the `compiling` directory of this project, and the discussion of this problem will all assume that you've `cd`ed into that directory. Your goal is complete the desired
-script. This includes at a minimum getting the tests in `tests.bats`
+script. This includes at a minimum getting the tests in `bats_tests.sh`
 (in the `compiling` directory) to pass.
 
 For this you should write a bash script called `extract_and_compile.sh` that:
@@ -343,7 +333,7 @@ you might see what you can figure out with `man gcc`.
 ### Second script: Clean up a big directory
 
 Your goal here to build a script that removes files that have been marked
-for deletion; at a minimum, you want to get the tests in `tests.bats`
+for deletion; at a minimum, you want to get the tests in `bats_tests.sh`
 to pass and make sure `shellcheck` is happy. For this you should write a
 bash script named `big_clean.sh` that:
 
