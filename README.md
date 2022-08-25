@@ -84,6 +84,14 @@ git submodule add https://github.com/bats-core/bats-support test/test_helper/bat
 git submodule add https://github.com/bats-core/bats-file test/test_helper/bats-file
 ```
 
+**AFTER** adding the submodules (which *may* or *may not* be required) run the following commands from the repository directory to import the necessary files:
+
+```
+git submodule init
+
+git submodule update
+```
+
 <details>
  <summary>Why do I need to do this?</summary>
 
