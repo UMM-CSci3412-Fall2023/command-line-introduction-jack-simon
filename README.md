@@ -147,7 +147,7 @@ You should make sure you run the `shellcheck` command on your shell
 scripts, e.g.,
 
 ```bash
-    shellcheck big_clean.sh
+    /snap/bin/shellcheck big_clean.sh
 ```
 
 and heed (or at least ask questions about) any warnings that it generates.
